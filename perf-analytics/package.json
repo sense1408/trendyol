@@ -1,0 +1,12 @@
+{
+  "name": "perf-analytics",
+  "version": "1.0.0",
+  "description": "PerfAnalytics.JS is a client-side library, which collects some performance related key metrics from browser and sends to the PerfAnalytics.API",
+  "main": "perfAnalytics.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node perfAnalytics.js"
+  },
+  "author": "Vlad Logvinov",
+  "license": "ISC"
+}

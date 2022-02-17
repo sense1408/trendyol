@@ -1,0 +1,19 @@
+.header-container {
+  margin: 20px 50px;
+}
+
+.header-container > div {
+  margin-bottom: 10px;
+}
+
+.last-chart {
+  margin-bottom: 50px;
+}
+
+.form-check .form-check-label {
+  margin-left: 5px;
+}
+
+.logo > img {
+  width: 300px;
+}
