@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const Analytics = require('./models');
 
 const port = 5000;
-const url = 'mongodb://mongo:27017/docker-node-api-mongo';
+const url = 'mongodb+srv://trendyol:tm3b0S9iNzgyephG@cluster0.1upom.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const connect = mongoose.connect(url);
 
 connect
@@ -35,20 +35,19 @@ app.use(express.static(__dirname + '/public'));
 app.all('/', (req, res, next) => {
   res.header(headers);
   requestCount++;
-  console.log('Request Number: ', requestCount);
   if ( req.method === 'GET' || req.method === 'POST' || req.method === 'OPTIONS') {
     next();
   } else {
     res.statusCode = 405;
-    res.end();
+    return res.end();
   }
 
 })
-  .get('/', ((req, res) => {
-    res.statusCode = 200;
+  .get('/', (async (req, res) => {
+    try {
     const { beginTime, endTime } = req.query;
 
-    const query = Analytics.find({
+    const data = await Analytics.find({
       $and:
         [
           {
@@ -60,24 +59,17 @@ app.all('/', (req, res, next) => {
               { $lte: Number(endTime) }
           }
         ]
-    }).limit(1000);
-    query.exec((err, response) => {
-      if ( err ) {
-        res.statusCode = 500;
-        res.send(JSON.stringify(err));
-      } else {
-        res.send(JSON.stringify(response));
-      }
-    });
-  }))
+    }).lean().limit(1000);
 
-  .post('/', ((req, res) => {
+    return res.status(200).send(JSON.stringify(data));
+  } catch(e) {
+    return res.status(500).send(JSON.stringify(e));
+  }}))
+  .post('/', (async (req, res) => {
     res.header(headers);
-    console.log(req.body);
+    
     req.body.forEach((document) => {
       const { url, analyticType, time, startTime } = document;
-      console.log("url", url)
-      console.log("analyticType", analyticType)
       const newAnalytics = Analytics({
         url,
         analyticType,
